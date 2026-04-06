@@ -1,0 +1,33 @@
+DEMO RAPORU — TABLOLARLA TEST
+
+Giriş:
+
+Bu metni uygulamadaki kutuya komple yapıştırıp PDF oluşturabilirsiniz. Tablolar, satırları | ile ayırdığınız bloklardır; bloktan önce ve sonra boş satır olmalıdır. İsteğe bağlı | --- | --- | satırı Markdown uyumluluğu içindir.
+
+ÖZET TABLOSU
+
+| Gösterge        | Değer   | Birim |
+| --------------- | ------- | ----- |
+| Proje süresi    | 12      | hafta |
+| Ekip büyüklüğü  | 4       | kişi  |
+| Bütçe (özet)    | 85.000  | ₺     |
+
+ÜRÜN VE STOK
+
+| Ürün adı      | Birim fiyat | Stok | Not        |
+| ------------- | ----------- | ---- | ---------- |
+| Defter (A4)   | 45,00 ₺     | 120  | İstanbul   |
+| Tükenmez kalem| 12,50 ₺     | 340  | Mavi/siyah |
+| Silgi         | 8,00 ₺      | 95   | —          |
+
+TAKVİM ÖRNEĞİ
+
+| Gün       | Görev           | Sorumlu   |
+| --------- | --------------- | --------- |
+| Pazartesi | Tasarım         | Ayşe      |
+| Salı      | Geliştirme      | Burak     |
+| Çarşamba  | Test ve PDF     | Deniz     |
+
+SONUÇ
+
+Türkçe karakterler tabloda da doğru görünmeli: ğüşıöç ĞÜŞİÖÇ İstanbul ılık özet.

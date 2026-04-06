@@ -36,6 +36,8 @@
             <p class="text-muted small mb-3">
               Büyük harfli tek satırlar <strong>başlık</strong> (kalın), <code>##</code> ile başlayan veya kısa ve
               <strong>:</strong> ile biten satırlar <strong>alt başlık</strong> (italik) olarak işlenir. Paragrafları boş satırla ayırın.
+              <strong>Tablo:</strong> satırları <code>| sütun1 | sütun2 |</code> şeklinde yazın; tablo bloğunun üstünde ve altında boş satır bırakın. İsterseniz <code>| --- | --- |</code> ayırıcı satırı ekleyin.
+              Örnek dosya: <code>ornek_metin_tablolar.txt</code>
             </p>
             <form action="{{ url_for('generate') }}" method="post" id="pdf-form">
               <div class="mb-3">
@@ -84,10 +86,11 @@
             <div class="mb-3">
               <label for="font" class="form-label">Font</label>
               <select class="form-select" id="font" name="font" form="pdf-form">
-                <option value="Arial" selected>Arial</option>
-                <option value="Times New Roman">Times New Roman</option>
-                <option value="Courier New">Courier New</option>
+                <option value="Arial" selected>Arial (DejaVu Sans)</option>
+                <option value="Times New Roman">Times New Roman (DejaVu Serif)</option>
+                <option value="Courier New">Courier New (DejaVu Sans Mono)</option>
               </select>
+              <p class="form-text small mb-0">PDF’te gömülü Unicode fontlar kullanılır; Türkçe karakterler (ğ, ü, ş, ı, ö, ç, İ) doğru görünür.</p>
             </div>
             <div class="mb-3">
               <label for="font_size" class="form-label">Yazı boyutu (8–24)</label>

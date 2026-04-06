@@ -1,0 +1,2 @@
+# Sadece .exe derlemek icin (opsiyonel)
+pyinstaller>=6.0.0,<7
