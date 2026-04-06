@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Akıllı Metin → PDF Dönüştürücü</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
+      <span class="navbar-brand fw-semibold">Akıllı Metin → PDF</span>
+      <span class="navbar-text text-white-50 small d-none d-md-inline">ReportLab · Flask</span>
+    </div>
+  </nav>
+
+  <main class="container py-4 py-lg-5">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body p-4">
+            <h1 class="h4 mb-3">Metin girişi</h1>
+            <p class="text-muted small mb-3">
+              Büyük harfli tek satırlar <strong>başlık</strong> (kalın), <code>##</code> ile başlayan veya kısa ve
+              <strong>:</strong> ile biten satırlar <strong>alt başlık</strong> (italik) olarak işlenir. Paragrafları boş satırla ayırın.
+            </p>
+            <form action="{{ url_for('generate') }}" method="post" id="pdf-form">
+              <div class="mb-3">
+                <label for="content" class="form-label">Belge metni</label>
+                <textarea class="form-control font-monospace" id="content" name="content" rows="16"
+                  placeholder="ÖRNEK BAŞLIK&#10;&#10;Giriş: Bu bölüm giriş metnidir. Türkçe karakterler: ğüşıöç ĞÜŞİÖÇ&#10;&#10;BİR SONRAKİ BÖLÜM&#10;&#10;Burada gövde metni devam eder."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg px-4">
+                PDF Oluştur
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-body p-4">
+            <h2 class="h5 mb-3">Belge ayarları</h2>
+            <div class="mb-3">
+              <label for="pdf_title" class="form-label">PDF başlığı</label>
+              <input type="text" class="form-control" id="pdf_title" name="pdf_title" form="pdf-form"
+                     value="Yeni Belge" maxlength="200">
+            </div>
+            <div class="mb-3">
+              <label for="author" class="form-label">Yazar adı</label>
+              <input type="text" class="form-control" id="author" name="author" form="pdf-form"
+                     placeholder="İsteğe bağlı" maxlength="120">
+            </div>
+            <div class="mb-3">
+              <label for="manual_date" class="form-label">Tarih</label>
+              <input type="date" class="form-control" id="manual_date" name="manual_date" form="pdf-form"
+                     value="{{ default_date }}">
+              <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" id="auto_date" name="auto_date" form="pdf-form" checked>
+                <label class="form-check-label" for="auto_date">Bugünün tarihini otomatik ekle</label>
+              </div>
+              <p class="form-text small mb-0">Otomatik kapalıysa yukarıdaki tarih PDF’te kullanılır.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-body p-4">
+            <h2 class="h5 mb-3">Görünüm</h2>
+            <div class="mb-3">
+              <label for="font" class="form-label">Font</label>
+              <select class="form-select" id="font" name="font" form="pdf-form">
+                <option value="Arial" selected>Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="font_size" class="form-label">Yazı boyutu (8–24)</label>
+              <input type="number" class="form-control" id="font_size" name="font_size" form="pdf-form"
+                     value="11" min="8" max="24">
+            </div>
+            <div class="mb-3">
+              <label class="form-label d-block">Tema</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="theme" id="theme_minimal" value="minimal" form="pdf-form" checked>
+                <label class="form-check-label" for="theme_minimal">Minimal — sade, sol hizalı</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="theme" id="theme_academic" value="academic" form="pdf-form">
+                <label class="form-check-label" for="theme_academic">Akademik — justify, ortalanmış üst bilgi</label>
+              </div>
+            </div>
+            <div class="form-check form-switch mb-0">
+              <input class="form-check-input" type="checkbox" id="add_cover" name="add_cover" form="pdf-form">
+              <label class="form-check-label" for="add_cover">Kapak sayfası ekle</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-top bg-white py-3 mt-auto">
+    <div class="container text-center text-muted small">
+      Üretim ortamında <code>FLASK_SECRET_KEY</code> ortam değişkenini mutlaka ayarlayın.
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

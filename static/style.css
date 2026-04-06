@@ -1,0 +1,28 @@
+/* Ek görünüm ince ayarları — Bootstrap ile uyumlu */
+
+:root {
+  --app-radius: 0.5rem;
+}
+
+.card {
+  border-radius: var(--app-radius);
+}
+
+textarea.form-control.font-monospace {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  resize: vertical;
+  min-height: 12rem;
+}
+
+.navbar-brand {
+  letter-spacing: 0.02em;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+main.container {
+  max-width: 1140px;
+}
